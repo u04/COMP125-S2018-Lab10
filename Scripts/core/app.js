@@ -1,5 +1,5 @@
 // core module - IIFE
-(function() {
+(function () {
   // App variables
   let XHR;
   let hash;
@@ -8,11 +8,17 @@
 
 
   function insertHTML(sourceURL, destTag) {
-    let target = document.getElementsByTagName(destTag)[0];
+//=============================================================
+    //let target = document.getElementsByTagName(destTag)[0];
+    //let target = document.querySelectorAll(destTag)[0];
+// let target = $(destTag)[0];
+let target = document.querySelector(destTag);
+// =====above is 4 diffrent ways to do the same thing===========
+
     XHR = new XMLHttpRequest();
-    XHR.addEventListener("readystatechange", function(){
-      if(this.status === 200) {
-        if(this.readyState === 4)  {
+    XHR.addEventListener("readystatechange", function () {
+      if (this.status === 200) {
+        if (this.readyState === 4) {
           target.innerHTML = this.responseText;
           setActiveNavLink();
         }
@@ -24,9 +30,9 @@
 
   function loadJSON() {
     XHR = new XMLHttpRequest();
-    XHR.addEventListener("readystatechange", function(){
-      if(this.status === 200) {
-        if(this.readyState === 4)  {
+    XHR.addEventListener("readystatechange", function () {
+      if (this.status === 200) {
+        if (this.readyState === 4) {
           addressBook = JSON.parse(this.responseText);
         }
       }
@@ -34,9 +40,9 @@
     XHR.open("GET", "/data.json");
     XHR.send();
 
-   
 
-  
+
+
   }
 
 
@@ -60,7 +66,7 @@
    */
   function Main() {
     console.log(`%c App Started...`, "font-weight: bold; font-size: 20px;");
-    
+
     insertHTML("/Views/partials/header.html", "header");
 
     setPageContent("/Views/content/home.html");
@@ -69,17 +75,36 @@
 
     loadJSON();
 
-    XHR.addEventListener("load", function(){
+    XHR.addEventListener("load", function () {
       addressBook.Contacts.forEach(contact => {
         let newContact = new objects.Contact(contact.name, contact.number, contact.email);
         console.log(newContact);
         Contacts.push(newContact);
       });
 
-      console.log(Contacts);
-    })
 
-    
+
+      console.log(Contacts);
+    });
+
+    $("#clickMeBtn").click.apply(function(){
+      $(this).attr("class", "btn btn-warning");
+      
+
+    })
+//============2 way to do same thing=====================================
+    /*
+    $("#clickMeBtn").click(function(){
+        console.log("clicked");
+        $(this).attr("class", "btn btn-danger");
+    }):
+    */
+
+    document.querySelector("#clickMeBtn")
+    .addEventListener("click", function(event){
+
+    });
+  //==========================================================
   }
 
   function setPageContent(url) {
@@ -100,7 +125,7 @@
 
   function setActiveNavLink() {
     // clears the "active" class from each of the list items in the navigation
-    document.querySelectorAll("li.nav-item").forEach(function(listItem){
+    document.querySelectorAll("li.nav-item").forEach(function (listItem) {
       listItem.setAttribute("class", "nav-item");
     });
 
